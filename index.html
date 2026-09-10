@@ -629,6 +629,23 @@ function signTex(text,bg,fg){
     g.fillText(text,w/2,h/2+2);
   });
 }
+/* two-line sign : big name on top, smaller line under it */
+function signTex2(main,sub,bg,fg,sfg){
+  return cvTex(512,140,function(g,w,h){
+    g.fillStyle=bg; g.fillRect(0,0,w,h);
+    g.textAlign='center'; g.textBaseline='middle';
+    /* stack the two lines, then centre the whole block on the plate */
+    var big=76, sml=33, gap=14,
+        bh=big*0.72, sh=sml*0.72,            /* approx cap heights */
+        top=(h-(bh+gap+sh))/2+2;             /* +2 balances the ink margins */
+    g.fillStyle=fg;
+    g.font='700 '+big+'px "IBM Plex Sans",system-ui,sans-serif';
+    g.fillText(main,w/2,top+bh/2);
+    g.fillStyle=sfg||fg;
+    g.font='600 '+sml+'px "IBM Plex Sans",system-ui,sans-serif';
+    g.fillText(sub,w/2,top+bh+gap+sh/2);
+  });
+}
 function panelTex(hex){
   return cvTex(256,240,function(g,w,h){
     g.fillStyle=hex; g.fillRect(0,0,w,h);
@@ -1049,7 +1066,9 @@ function zoneFloor(x0,z0,x1,z1,hex,op){
   [[11.35,0xEFE7DE],[12.2,0xD9BFA6],[13.05,0xEFE7DE]].forEach(function(o){
     box(g,0.2,0.24,0.16,o[1],o[0],0.84,3.62,0,0.04);
   });
-  plate(g,1.55,0.4,signTex('Ability in Action','#F3EBE0','#7A6250'),12.2,0.55,3.12,Math.PI);
+  /* shop sign : "Dot Coffee" large, "Ability in Action" smaller beneath it */
+  plate(g,2.4,0.655,signTex2('Dot Coffee','Ability in Action','#F3EBE0','#5C4636','#7A6250'),
+        12.2,0.575,3.12,Math.PI);   /* centred on the 2.9 x 1.15 back-bar wall */
   /* service counter — straight, with a clear working aisle behind it */
   counter(g,12.2,5.00,2.9,0.72,0,0xD9BFA6);
   box(g,0.62,0.45,0.46,0xE8DDD0,11.15,1.07,5.00,0,0.06);   /* espresso machine */
